@@ -1,0 +1,77 @@
+body {font-family:Verdana, Arial, sans-serif;
+      background-color: #f4eed9;
+    background-image: url("image/slash.jpg");
+    background-size: 150px;
+}
+#wrapper { background-color: #f4eac8; 
+           color: #e5d190;
+           width: 80%;
+		   margin: auto;
+           min-width:850px;
+            box-shadow: 5px 5px 5px black;
+} 
+#leftcolumn { float: left;
+	          width: 150px;
+} 
+#rightcolumn { margin-left: 155px;
+               background-color: #ffffff;
+               color: #000000;
+}
+header{ background-color: #f7a054;
+        color: #7c620c;
+        padding: 10px 10px 10px 10px;
+}
+
+header img {
+    height: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+h2 { color: #7c620c;
+     font-family: arial, sans-serif;
+}
+.content {padding: 5px 20px 10px 20px;
+} 
+#floatleft { margin: 10px 30px 20px 20px;
+             float: left;
+}
+
+footer { background-color: #f7a054;
+        font-size: 70%;
+        padding: 10px 10px 10px 155px;
+}	
+nav ul { 
+	list-style-type: none;
+}
+nav a {
+	text-decoration: none;
+	color: #7c620c;
+    font-family: arial, sans-serif;
+    font-weight: bold;
+}
+a {
+    text-decoration: none;
+    color: #000000;
+}
+table{ margin: auto; border: 5px solid white; width: 650px; border-spacing: 0;}
+td { padding: 5px; font-family: Arial, sans-serif; border-style: none;}
+tr:nth-of-type(odd) {background-color: #efd683; color: #7c620c;}
+
+form {
+	font-family: Arial, sans-serif;
+	 }
+label { float: left; clear: left;
+	    display: block; width: 100px; 
+	    text-align: right; 
+	    padding-right: 10px;
+	    margin-top: 10px; }
+input, textarea { margin-top: 10px; 
+                  display: block;}
+#footer {
+    text-align: center;
+    position: relative;
+    right: 6%;
+    color: #000000;
+}

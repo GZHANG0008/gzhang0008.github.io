@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JavaJam Coffee House</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script type = "text/javascript"  src = "cost.js" ></script>
+</head>
+<body>
+<div id="wrapper">
+  <header>
+	  <img src = "image/logo.png" >
+  </header>
+  <div id="leftcolumn">
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="music.html">Music</a></li>
+      <li><a href="jobs.html">Jobs</a></li>
+	</ul>
+  </nav>	
+  </div>
+  <div id="rightcolumn">
+    <div class="content"> 
+		<h2>Coffee at JavaJam</h2>
+        <form action="show_get.php" method="get" style=''>
+            <table border="1">
+                <tr>
+                    <td>Coffee</td>
+                    <td>Description</td>
+                    <td>
+                        Quantity
+                    </td>
+                    <td>
+                        Cup Size
+                    </td>
+                    <td>
+                        Subtotal($)
+                    </td>
+                </tr>
+                <tr>
+                <td>Just Java</td>
+                <td>Regular house blend, decaffeinated coffee, or flavour of the day<br>
+                Endless Cup $2.00</td>
+                <td>
+                    <input type="number" style="width: 50px;" min="0" name="JavaQty"  id="JavaQty" oninput = "computeJava()">
+                </td>
+                <td>
+                </td>
+                <td>
+                    <input type="text" style="width: 50px" id="JavaSub" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td>Cage au Lait</td>
+                <td>House blended coffee infused into a smooth, steamed milk.<br>
+                Single $2.00 Double $3.00</td>
+                <td>
+                    <input type="number" style="width: 50px;" min="0" name="LaitQty"  id="LaitQty" oninput = "computeLait()">
+                </td>
+                <td>
+                    <select name="LaitSize" id="LaitSize" oninput = "computeLait()">
+                        <option value="Single" selected>Single</option>
+                        <option value="Double">Double</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" style="width: 50px" id="LaitSub" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td>Iced Cappuccino</td>
+                <td>Sweetened espresso blended with icy-cold milk and served ina chilled glass.<br>
+                Single $4.75 Double $5.75</td>
+                <td>
+                    <input type="number" style="width: 50px;" min="0" name="CapQty"  id="CapQty" oninput = "computeCap()">
+                </td>
+                <td>
+                    <select name="CapSize" id="CapSize" oninput = "computeCap()">
+                        <option value="Single" selected>Single</option>
+                        <option value="Double">Double</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" style="width: 50px" id="CapSub" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td colspan="3">
+                    <label for="total">Total Price($): </label>
+                    <input type="number" style="width: 70px" name="total" id="total" readonly/>
+                    <input type = "submit"  value = "Submit Order" />
+                </td>
+            </tr>
+            </table>
+        </form>
+    </div>
+	</div>
+    <footer>
+		<div id="footer">
+		Copyright &copy; 2017 JavaJam Coffee House<br>
+			<a href="mailto:GZHANG008@e.ntu.edu.sg">GZHANG008@e.ntu.edu.sg</a>
+		</div>
+    </footer>
+</div>
+</body>
+</html>
+
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>JavaJam Coffee House</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style.css">
+	<script src="validation.js"></script>
+</head>
+<body>
+<div id="wrapper">
+  <header>
+	  <img src = "image/logo.png" >
+  </header>
+  <div id="leftcolumn">
+	  <nav>
+		<ul>
+		  <li><a href="index.html">Home</a></li>
+		  <li><a href="menu.html">Menu</a></li>
+		  <li><a href="music.html">Music</a></li>
+		  <li><a href="jobs.html">Jobs</a></li>
+		</ul>
+	  </nav>
+  </div>
+  <div id="rightcolumn">
+    <div class="content"> 
+		<h2>Jobs at JavaJam</h2>
+		<p>Want to work st JavaJam? Fill out the form below to start yoru application. 
+		Required fileds are marked with asterisk*</p>
+		<form method="post" action="show_post.php" onsubmit="return validation()">
+		  <label for="myName">*Name:  </label>
+		  <input type="text" name="myName" id="myName" required><br>
+		  <label for="myEmail">*E-mail:  </label>
+		  <input type="email" name="myEmail" id="myEmail" required><br>
+		  <label for="startDate">Start Date  :</label>
+		  <input type="date" name="startDate" id="startDate"><br>
+		  <label for="myComments">*Experience:  </label>
+		  <textarea name="myComments" id="myComments" rows="2" cols="20" required></textarea>
+		  <input id="mySubmit" type="submit" value="Apply Now">
+		</form>
+    </div>
+	</div>
+    <footer>
+		<div id="footer">
+		Copyright &copy; 2017 JavaJam Coffee House<br>
+		<a href="mailto:GZHANG008@e.ntu.edu.sg">GZHANG008@e.ntu.edu.sg</a>
+		</div>
+    </footer>
+</div>
+</body>
+</html>
+
+
