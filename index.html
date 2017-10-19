@@ -1,347 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link href="http://mfxuan.free.800m.net/blogCss/reset.css" type="text/css" rel="stylesheet" />
-    <link href="http://mfxuan.free.800m.net/blogCss/main.css" rel="stylesheet" type="text/css" />
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <style type="text/css">
-        html {height: auto;}
-        body {height: auto;margin: 0;padding: 0;}
-        #map_canvas {width:900px;height: 800px;position: absolute;}
-        @media print {#map_canvas {height: 950px;}}
-        #floating-panel {
-            background-image: url('Image/bus3.jpg');
-            background-size: 80px 60px;
-            background-repeat: no-repeat;
-            position: absolute;
-            top: 10px;
-            z-index: 5;
-            background-color: #fff;
-            padding: 5px;
-            border: 1px solid #999;
-            text-align: right;
-            font-family: 'Roboto','sans-serif';
-            line-height: 30px;
-            padding-left: 10px;
-        }
-    </style>
+<title>JavaJam Coffee House</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="floating-panel">
-        <h1>NTU Campus map</h1>
-        <input onclick="RedLine();" type=button value="Red Line">
-        <input onclick="BlueLine();" type=button value="Blue Line">
-        <input onclick="GreenLine();" type=button value="Green Line">
-        <input onclick="BrownLine();" type=button value="Brown Line">
+<div id="wrapper">
+  <header>
+      <img src = "image/logo.png" >
+  </header>
+  <div id="leftcolumn">
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="music.html">Music</a></li>
+      <li><a href="jobs.html">Jobs</a></li>
+	</ul>
+  </nav>	
+  </div>
+  <div id="rightcolumn">
+    <div class="content"> 
+	<h2>Follow the Winding Road to JavaJam</h2>
+	<img src="image/mountain.jpg" width="250" id="floatleft">
+	<ul>
+      <li>Specialty Coffee and Tea</li>
+      <li>Bageis, Muffins, and Organic Snacks</li>
+      <li>Music and Poetry Readings</li>
+      <li>Open Mic Night Every Friday</li>
+	</ul>
+    <p>54321 Route 42 <br>
+	Elison Bay, WI 54210<br>
+	888-555-5555</p>
+   
     </div>
-    <script>
-        var p;//定义景点坐标数组
-        var map;//定义地图对象s
-        var markers = [];//记录所有景点的Marker信息
-        var vehicles = [];
-        var mydate = new Date();
-        var myday = mydate.getDay();
-        var stop;
-        var clearStop;
-        myday = parseFloat(myday);
-
-        const REQUEST_URL = 'https://baseride.com/routes/apigeo/routevariantvehicle/';
-        const BLUE_BUS = 44479;
-        const RED_BUS = 44478;
-        const GREEN_BUS = 44480;
-        const BROWN_BUS = 44481;
-        var BUS = 44479;
-
-        var drawPath;
-        var pathColor = "#424bf4";
-        var pathCoordinates = [
-            {lat: 1.34202333, lng: 103.68085397},
-            {lat: 1.34129397, lng: 103.67999566},
-            {lat: 1.34127252, lng: 103.67915881},
-            {lat: 1.34363221, lng: 103.67892278},
-            {lat: 1.34491932, lng: 103.67847216},
-            {lat: 1.34702159, lng: 103.67834342},
-            {lat: 1.34880209, lng: 103.68190539},
-            {lat: 1.35096871, lng: 103.67980254},
-            {lat: 1.3534142, lng: 103.68216288},
-            {lat: 1.35588114, lng: 103.68593943},
-            {lat: 1.35588115, lng: 103.68686211},
-            {lat: 1.35515179, lng: 103.68787062},
-            {lat: 1.35304952, lng: 103.68621838},
-            {lat: 1.35193404, lng: 103.68583215},
-            {lat: 1.35043242, lng: 103.68581069},
-            {lat: 1.34946709, lng: 103.68501675},
-            {lat: 1.34890934, lng: 103.68581069},
-            {lat: 1.34850176, lng: 103.68643296},
-            {lat: 1.34702159, lng: 103.68654025},
-            {lat: 1.34483351, lng: 103.68829978},
-            {lat: 1.34354641, lng: 103.68656171},
-            {lat: 1.34376093, lng: 103.68482363},
-            {lat: 1.3427956, lng: 103.68362201},
-            {lat: 1.34122961, lng: 103.6838795},
-            {lat: 1.34050025, lng: 103.68252766},
-            {lat: 1.34118671, lng: 103.68177665},
-            {lat: 1.34202333, lng: 103.68085397}
-        ];
-        stop = [
-            {x: 1.34184014,y: 103.6810112},
-            {x: 1.34188304,y: 103.67882252},
-            {x: 1.34604468,y: 103.6782217},
-            {x: 1.34816841,y: 103.68047476},
-            {x: 1.35044229,y: 103.68032456},
-            {x: 1.35350988,y: 103.68178368},
-            {x: 1.35565505,y: 103.68495941},
-            {x: 1.35432505,y: 103.68734121},
-            {x: 1.35072116,y: 103.68583918},
-            {x: 1.34776082,y: 103.68691206},
-            {x: 1.34359918,y: 103.68712664},
-            {x: 1.34209756,y: 103.6839509}
-        ];
-
-        //To choose which campus and corresponding to API
-        function RedLine() {
-            clearStop = 1;
-            pathColor = "#FF0000";
-            BUS = RED_BUS;
-            console.log(BUS);
-            pathCoordinates = [
-                {lat: 1.34052171, lng: 103.68293536},
-                {lat: 1.33994251, lng: 103.68192685},
-                {lat: 1.33981379, lng: 103.6801244},
-                {lat: 1.34071477, lng: 103.67913735},
-                {lat: 1.34127252, lng: 103.67915881},
-                {lat: 1.34363221, lng: 103.67892278},
-                {lat: 1.34491932, lng: 103.67847216},
-                {lat: 1.34702159, lng: 103.67834342},
-                {lat: 1.34880209, lng: 103.68190539},
-                {lat: 1.35096871, lng: 103.67980254},
-                {lat: 1.3534142, lng: 103.68216288},
-                {lat: 1.35588114, lng: 103.68593943},
-                {lat: 1.35588115, lng: 103.68686211},
-                {lat: 1.35515179, lng: 103.68787062},
-                {lat: 1.35304952, lng: 103.68621838},
-                {lat: 1.35193404, lng: 103.68583215},
-                {lat: 1.35043242, lng: 103.68581069},
-                {lat: 1.34946709, lng: 103.68501675},
-                {lat: 1.34890934, lng: 103.68581069},
-                {lat: 1.34850176, lng: 103.68643296},
-                {lat: 1.34702159, lng: 103.68654025},
-                {lat: 1.34483351, lng: 103.68829978},
-                {lat: 1.34354641, lng: 103.68656171},
-                {lat: 1.34376093, lng: 103.68482363},
-                {lat: 1.3427956, lng: 103.68362201},
-                {lat: 1.34122961, lng: 103.6838795},
-                {lat: 1.34052171, lng: 103.68293536}
-            ];
-            stop = [
-            {x: 1.33997383,y: 103.68126869},
-            {x: 1.34175433,y: 103.67927313},
-            {x: 1.34458596,y: 103.67880106},
-            {x: 1.34765356,y: 103.68041039},
-            {x: 1.35172939,y: 103.68060351},
-            {x: 1.35458247,y: 103.68412256},
-            {x: 1.3556336,y: 103.68716955},
-            {x: 1.35430359,y: 103.68680477},
-            {x: 1.35187955,y: 103.6856246},
-            {x: 1.34919809,y: 103.68510962},
-            {x: 1.34520807,y: 103.68796349},
-            {x: 1.34379225,y: 103.68650436},
-            {x: 1.34259095,y: 103.68347883}
-            ];
-        }
-        function BlueLine() {
-            clearStop = 1;
-            BUS = BLUE_BUS;
-            console.log(BUS);
-            pathColor = "#424bf4";
-            pathCoordinates = [
-                {lat: 1.34202333, lng: 103.68085397},
-                {lat: 1.34129397, lng: 103.67999566},
-                {lat: 1.34127252, lng: 103.67915881},
-                {lat: 1.34363221, lng: 103.67892278},
-                {lat: 1.34491932, lng: 103.67847216},
-                {lat: 1.34702159, lng: 103.67834342},
-                {lat: 1.34880209, lng: 103.68190539},
-                {lat: 1.35096871, lng: 103.67980254},
-                {lat: 1.3534142, lng: 103.68216288},
-                {lat: 1.35588114, lng: 103.68593943},
-                {lat: 1.35588115, lng: 103.68686211},
-                {lat: 1.35515179, lng: 103.68787062},
-                {lat: 1.35304952, lng: 103.68621838},
-                {lat: 1.35193404, lng: 103.68583215},
-                {lat: 1.35043242, lng: 103.68581069},
-                {lat: 1.34946709, lng: 103.68501675},
-                {lat: 1.34890934, lng: 103.68581069},
-                {lat: 1.34850176, lng: 103.68643296},
-                {lat: 1.34702159, lng: 103.68654025},
-                {lat: 1.34483351, lng: 103.68829978},
-                {lat: 1.34354641, lng: 103.68656171},
-                {lat: 1.34376093, lng: 103.68482363},
-                {lat: 1.3427956, lng: 103.68362201},
-                {lat: 1.34122961, lng: 103.6838795},
-                {lat: 1.34050025, lng: 103.68252766},
-                {lat: 1.34118671, lng: 103.68177665},
-                {lat: 1.34202333, lng: 103.68085397}
-            ];
-            stop = [
-                {x: 1.34184014,y: 103.6810112},
-                {x: 1.34188304,y: 103.67882252},
-                {x: 1.34604468,y: 103.6782217},
-                {x: 1.34816841,y: 103.68047476},
-                {x: 1.35044229,y: 103.68032456},
-                {x: 1.35350988,y: 103.68178368},
-                {x: 1.35565505,y: 103.68495941},
-                {x: 1.35432505,y: 103.68734121},
-                {x: 1.35072116,y: 103.68583918},
-                {x: 1.34776082,y: 103.68691206},
-                {x: 1.34359918,y: 103.68712664},
-                {x: 1.34209756,y: 103.6839509}
-            ];
-        }
-        function GreenLine() {
-            clearStop = 1;
-            pathColor = "#138c17";
-            pathCoordinates = [
-                {lat: 1.34481206, lng: 103.68097881},
-                {lat: 1.34476916, lng: 103.68188393},
-                {lat: 1.34556287, lng: 103.68261349},
-                {lat: 1.34665691, lng: 103.68368638},
-                {lat: 1.34855454, lng: 103.68380427},
-                {lat: 1.34951986, lng: 103.68502736},
-                {lat: 1.34885486, lng: 103.68576765},
-                {lat: 1.34836147, lng: 103.68658304},
-                {lat: 1.34698856, lng: 103.68656158},
-                {lat: 1.34488629, lng: 103.68838549},
-                {lat: 1.34604468, lng: 103.68973732},
-                {lat: 1.34690275, lng: 103.69016647},
-                {lat: 1.33774284, lng: 103.69600296},
-                {lat: 1.3378072, lng: 103.69868517},
-                {lat: 1.34143255, lng: 103.69641066},
-                {lat: 1.3396735, lng: 103.6947155}
-            ];
-            stop = [
-                {x: 1.34486484,y: 103.68159056},
-                {x: 1.34565855,y: 103.68281365},
-                {x: 1.34876905,y: 103.68553877},
-                {x: 1.34516516,y: 103.68794203},
-                {x: 1.33795736,y: 103.69680405}
-            ];
-            if(myday === 6 || myday === 7){
-                alert("There is no Green line on weekend, please choose weekend rider!!!");
-            }else {
-                StartLan = 1.344873;
-                StartLon = 103.681370;
-                EndLan = 1.337175;
-                EndLon = 103.696131;
-                BUS = GREEN_BUS;
-                console.log(BUS);
-            }
-        }
-        function BrownLine() {
-            if(myday === 6 || myday === 7) {
-                BUS = BROWN_BUS;
-                console.log(BUS);
-            }else{
-                alert("There is no weekend rider on weekday, please choose campus rider!!!");
-            }
-        }
-
-        $( document ).ready(function() {
-                var directionsDisplay;
-                var directionsService = new google.maps.DirectionsService();
-                    directionsDisplay = new google.maps.DirectionsRenderer();
-
-                    var mapProp= {
-                        center:new google.maps.LatLng(1.3484, 103.6851),
-                        zoom:16,
-                        mapTypeId: 'terrain'
-                    };
-                    map = new google.maps.Map(document.getElementById("map_canvas"),mapProp);
-                    directionsDisplay.setMap(map);
-
-                drawPath = new google.maps.Polyline({});
-
-               //To fetch the  data
-                var fetchBus = function () {
-
-                    //To clear the previous path
-                    drawPath.setMap(null);
-
-                    //To clear all the markers before all again
-                    for (var m = 0; m < markers.length; m++) {
-                        if(markers[m].title === "Bus") {
-                            markers[m].setMap(null);
-//                            console.log(markers[m].title);
-                        }
-                        else if(clearStop === 1 && markers[m].title === "stop"){
-                                markers[m].setMap(null);
-                        }
-                    }
-                    clearStop = 0;
-
-                    //To draw updated path
-                    drawPath = new google.maps.Polyline({
-                        path: pathCoordinates,
-                        geodesic: true,
-                        strokeColor: pathColor,
-                        strokeOpacity: 1.0,
-                        strokeWeight: 2
-                    });
-                    drawPath.setMap(map);
-
-                    //To add bus stop
-                    for(var k=0;k<stop.length;k++) {
-                        var stopMarker = new google.maps.Marker({
-                            position: {lat: stop[k].x, lng: stop[k].y},
-                            map: map,
-                            title: "stop",
-                            visible: true
-                        });
-                        markers.push(stopMarker);
-                    }
-
-                    $.ajax({
-                         url: REQUEST_URL + BUS + '/?format=json&junk=' + Math.floor(Math.random()*100)
-                    }).done(function(results) {
-                        vehicles = results.vehicles;
-                        p = [{x:0,y:0,title:'Shuttle Bus'}];
-
-                        //To add all the bus information
-                        for(var j=0;j<vehicles.length;j++ ){
-                            if(vehicles[j].stats.avg_speed > 0.0001){
-                                 console.log(vehicles[j].stats.avg_speed);
-                                var lanx = parseFloat(vehicles[j].lat);
-                                var lany = parseFloat(vehicles[j].lon);
-                                p[j] = {x:lanx,y:lany,title:'Bus'}
-                            }
-                        }
-
-                        //To add marker
-                        for(var i=0;i<p.length;i++){
-                            var image = {
-                                url: 'Image/bus2.jpg',
-                                scaledSize: new google.maps.Size(28,30)
-                            }
-//                            var image = 'http://api.go2map.com/maps/images/v2.0/flag.png';
-                            if (p[i]){
-                                var marker = new google.maps.Marker({
-                                    position: {lat: p[i].x, lng: p[i].y},
-                                    map: map,
-                                    title:p[i].title,
-                                    icon:image,
-                                    visible:true
-                                });
-                            }
-                            markers.push(marker);
-                            console.log(markers[0].title);
-                        }
-                    });
-                    setTimeout(fetchBus,4000);
-                };
-                fetchBus();
-        });
-    </script>
-<div id="map_canvas"></div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYQuEPQE-hXeHmQaDyaDsvJ848jei8uTA&callback=myMap"></script>
+	</div>
+    <footer>
+        <div id="footer">
+            Copyright &copy; 2017 JavaJam Coffee House<br>
+            <a href="mailto:GZHANG008@e.ntu.edu.sg">GZHANG008@e.ntu.edu.sg</a>
+        </div>
+    </footer>
+</div>
 </body>
 </html>
+
+
